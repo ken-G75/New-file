@@ -176,13 +176,18 @@ export default function Home() {
         </motion.div>
       </div>
 
-<div className="mt-6 flex gap-3">
-            <Link href="/upload">
-              <a className="inline-flex items-center gap-2 btn-primary px-4 py-2 rounded-2xl shadow">
-                <Upload size={16} /> Upload
-              </a>
-            </Link>
-          </div>
+<div className="mt-6">
+  <Link href="/upload">
+    <a className="w-full inline-flex items-center justify-center gap-2 
+       px-6 py-3 rounded-2xl 
+       bg-gradient-to-r from-blue-500 to-indigo-600 
+       text-white text-lg font-medium 
+       shadow-lg hover:shadow-xl 
+       hover:scale-105 transition-all">
+      <Upload size={18} /> Upload
+    </a>
+  </Link>
+</div>
 
       {/* TESTIMONIALS SECTION */}
       <div className="mt-16">
