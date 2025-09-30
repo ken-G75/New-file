@@ -41,7 +41,6 @@ export default function Upload() {
         setStatus("⚠️ Contact already exists.");
       } else {
         setStatus("✅ Contact uploaded! Redirecting...");
-        setTimeout(() => router.push("/community"), 2500);
       }
     } catch (err) {
       setStatus("❌ Upload failed.");
