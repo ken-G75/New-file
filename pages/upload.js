@@ -39,7 +39,11 @@ const json = await res.json();
       } else if (json.exists) {
         setStatus("⚠️ Contact already exists.");
       } else {
-        setStatus("✅ Contact uploaded! ");
+        setStatus("✅ Contact uploaded! Redirecting...");
+setTimeout(() => {
+  window.location.href = "https://chat.whatsapp.com/YOUR_GROUP_INVITE_LINK";
+}, 2000);
+        
       }
     } catch (err) {
       setStatus("❌ Upload failed.");
