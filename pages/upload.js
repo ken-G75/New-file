@@ -33,19 +33,20 @@ export default function Upload() {
           phone: sanitizePhone(phone),
         }),
       });
-
-      const json = await res.json();
-      if (!res.ok) {
-        setStatus(json?.error || "❌ Upload failed");
-      } else if (json.exists) {
-        setStatus("⚠️ Contact already exists.");
-      } else {
-        setStatus("✅ Contact uploaded! ");
-      }
-    } catch (err) {
-      setStatus("❌ Upload failed.");
-    }
-  }
+export default function SuccessPage() {
+  return (
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
+      <h1 className="text-3xl font-bold text-green-600 mb-4">Merci !</h1>
+      <p className="text-gray-700">Votre contact a été enregistré avec succès.</p>
+      <a
+        href="/"
+        className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-2xl hover:bg-blue-700 transition"
+      >
+        Retour à l'accueil
+      </a>
+    </div>
+  );
+}
 
   return (
     <div className="max-w-lg mx-auto px-4 py-10 text-center animate-fade-in">
