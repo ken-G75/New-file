@@ -31,18 +31,25 @@ export default function Upload() {
         body: JSON.stringify({
           name: finalName,
           phone: sanitizePhone(phone),
-        }),
-      });
+          
+const res = await fetch("/api/upload", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(data),
+});
+
 const json = await res.json();
-      if (!res.ok) {
-        setStatus(json?.error || "❌ Upload failed");
-      } else if (json.exists) {
-        setStatus("⚠️ Contact already exists.");
-      } else {
-        setStatus("✅ Contact uploaded! ");
-setTimeout(() => {
-  window.location.href = "https://chat.whatsapp.com/YOUR_GROUP_INVITE_LINK";
-}, 2000);
+
+if (!res.ok) {
+  setStatus(json?.error || "❌ Upload failed");
+} else if (json.exists) {
+  setStatus("⚠️ Contact already exists.");
+} else {
+  setStatus("✅ Contact uploaded!");
+  setTimeout(() => {
+    window.location.href = "https://chat.whatsapp.com/PUT_REAL_GROUP_LINK_HERE";
+  }, 2000);
+          }
         
       }
     } catch (err) {
