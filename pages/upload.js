@@ -40,7 +40,7 @@ export default function Upload() {
       } else if (json.exists) {
         setStatus("⚠️ Contact already exists.");
       } else {
-        setStatus("✅ Contact uploaded! Redirecting...");
+        setStatus("✅ Contact uploaded! ");
       }
     } catch (err) {
       setStatus("❌ Upload failed.");
