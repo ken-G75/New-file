@@ -14,33 +14,28 @@ import {
 import { useEffect, useState } from "react";
 
 // --- FAQ Data ---
-const testimonials = [
-  { 
-    name: "Aisha", 
-    role: "Designer Produit", 
-    result: "J'ai reçu mon fichier VCF immédiatement et sans aucune complication. Cela m'a permis d'ajouter facilement tous mes contacts à mon téléphone et de commencer à partager mon numéro avec ma communauté. Le processus était clair et rapide, ce qui m'a vraiment fait gagner du temps.", 
-    rating: 5 
+const faqData = [
+  {
+    question: "Comment mes vues vont-elles augmenter avec Ralph Xpert ?",
+    answer:
+      "En exportant vos contacts au format VCF et en le partageant, vous permettez à de nombreuses personnes d’enregistrer votre numéro en même temps. Lorsqu’elles consultent votre statut WhatsApp, vous obtenez plus de vues, ce qui aide à développer votre audience",
   },
-  { 
-    name: "Mhuoeka", 
-    role: "Ingénieur Logiciel", 
-    result: "Grâce au fichier VCF de Ralph, j'ai pu développer efficacement mon audience WhatsApp. La facilité d'importation des contacts m'a permis de me concentrer sur la création de contenu et d'engager mes contacts sans perdre de temps à ajouter manuellement chaque numéro. C'est un outil fiable et pratique.", 
-    rating: 5 
+  {
+    question: "Mon compte WhatsApp est-il sûr?",
+    answer:
+      "Oui, votre compte est 100 % sécurisé. Ce service ne nécessite pas l’accès à votre compte WhatsApp ni à aucune information personnelle. Il fonctionne uniquement avec les contacts que vous choisissez de télécharger et d’exporter.",
   },
-  { 
-    name: "Zainab", 
-    role: "Marketeuse", 
-    result: "La communauté est très active et engagée grâce à cette fonctionnalité. Le fichier VCF m'a permis de partager rapidement mes contacts avec mes collaborateurs et mes clients, et j'ai constaté une nette augmentation des interactions et des vues sur mes statuts WhatsApp. Cela a vraiment boosté mon marketing digital.", 
-    rating: 4 
+  {
+    question: "c'est gratuit?",
+    answer:
+      "Oui, les fonctionnalités principales de collecte de contacts et d’exportation en fichier VCF sont entièrement gratuites. Nous croyons en l’aide à la croissance de votre communauté sans obstacles.",
   },
-  { 
-    name: "Joseph", 
-    role: "Entrepreneur", 
-    result: "Mes vues sur WhatsApp ont considérablement augmenté depuis que j'utilise le fichier VCF de Ralph. Tous mes contacts ont été ajoutés facilement, et j'ai pu toucher un public beaucoup plus large que jamais. Ce service est simple, rapide et fiable, et il a un impact réel sur le développement de mon entreprise.", 
-    rating: 5 
+  {
+    question: "Est-ce que cela fonctionne dans tous les pays ?",
+    answer:
+      "Absolument. Tant que votre smartphone ou appareil peut importer un fichier de contacts .vcf standard, notre service fonctionnera pour vous, peu importe où vous êtes dans le monde.",
   },
 ];
-
 
 export default function Home() {
   const [count, setCount] = useState(0);
@@ -136,7 +131,7 @@ const testimonials = [
       {/* UPLOAD BUTTON */}
       <div className="mt-6">
         <Link
-          href="/s'inscrire"
+          href="/Upload"
           className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-lg font-medium shadow-lg hover:shadow-xl hover:scale-105 transition-all"
         >
           <Upload size={18} /> Upload
