@@ -14,10 +14,12 @@ export default function Upload() {
 
   async function onSubmit(e) {
     e.preventDefault();
+
     if (!name.trim() || !phone.trim()) {
       setStatus("⚠️ Please fill name and phone.");
       return;
     }
+
     setStatus("⏳ Uploading...");
 
     try {
@@ -27,32 +29,28 @@ export default function Upload() {
 
       const res = await fetch("/api/upload", {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: finalName,
           phone: sanitizePhone(phone),
-          
-const res = await fetch("/api/upload", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(data),
-});
+        }),
+      });
 
-const json = await res.json();
+      const json = await res.json();
 
-if (!res.ok) {
-  setStatus(json?.error || "❌ Upload failed");
-} else if (json.exists) {
-  setStatus("⚠️ Contact already exists.");
-} else {
-  setStatus("✅ Contact uploaded!");
-  setTimeout(() => {
-    window.location.href = "https://chat.whatsapp.com/PUT_REAL_GROUP_LINK_HERE";
-  }, 2000);
-          }
-        
+      if (!res.ok) {
+        setStatus(json?.error || "❌ Upload failed");
+      } else if (json.exists) {
+        setStatus("⚠️ Contact already exists.");
+      } else {
+        setStatus("✅ Contact uploaded!");
+        // Redirection safely in browser
+        setTimeout(() => {
+          window.location.href = "https://chat.whatsapp.com/PUT_REAL_GROUP_LINK_HERE";
+        }, 2000);
       }
     } catch (err) {
+      console.error(err);
       setStatus("❌ Upload failed.");
     }
   }
@@ -109,5 +107,4 @@ if (!res.ok) {
       )}
     </div>
   );
-          }
-          
+              }
