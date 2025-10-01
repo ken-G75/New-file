@@ -7,7 +7,7 @@ export default async function handler(req,res) {
   if (!verify.ok) return res.status(401).json({ error: "Unauthorized" });
 
   try {
-    const { error } = await supabaseAdmin.from("ralph_xpert").delete().neq("id", ""); // delete all
+    const { error } = await supabaseAdmin.from("ralph_xpert").delete().not("id", "is", null);// delete all
     if (error) throw error;
     return res.status(200).json({ ok: true });
   } catch (err) {
