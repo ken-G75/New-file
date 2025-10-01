@@ -102,7 +102,7 @@ const testimonials = [
             Welcome to <span className="text-accent">Ralph Xpert VCF</span>
           </motion.h1>
           <p className="text-sm text-gray-300 mt-4">
-            Collect contacts quickly, export as .vcf or PDF, and share with your community. Admins can manage everything from the dashboard.
+            Bienvenue dans la communauté Ralph Xpert ! 🌟 Nous allons vous aider à obtenir plus de visibilité. Suivez les instructions et augmentez facilement vos vues.
           </p>
         </div>
 
