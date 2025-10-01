@@ -14,34 +14,33 @@ import {
 import { useEffect, useState } from "react";
 
 // --- FAQ Data ---
-const faqData = [
-[
-  {
-    question: "Comment mes vues vont-elles augmenter avec Ralph Xpert ?",
-    answer:
-      "Exportez vos contacts en fichier VCF et partagez-le. Les personnes qui enregistrent votre numéro verront vos statuts WhatsApp, ce qui augmente vos vues et développe votre audience.",
+const testimonials = [
+  { 
+    name: "Aisha", 
+    role: "Designer Produit", 
+    result: "J'ai reçu mon fichier VCF immédiatement et sans aucune complication. Cela m'a permis d'ajouter facilement tous mes contacts à mon téléphone et de commencer à partager mon numéro avec ma communauté. Le processus était clair et rapide, ce qui m'a vraiment fait gagner du temps.", 
+    rating: 5 
   },
-  {
-    question: "Mon compte WhatsApp est-il sécurisé ?",
-    answer:
-      "Oui, votre compte est entièrement sécurisé. Ralph Xpert n'a aucun accès à votre compte ni à vos informations personnelles. Seuls les contacts que vous choisissez sont utilisés.",
+  { 
+    name: "Mhuoeka", 
+    role: "Ingénieur Logiciel", 
+    result: "Grâce au fichier VCF de Ralph, j'ai pu développer efficacement mon audience WhatsApp. La facilité d'importation des contacts m'a permis de me concentrer sur la création de contenu et d'engager mes contacts sans perdre de temps à ajouter manuellement chaque numéro. C'est un outil fiable et pratique.", 
+    rating: 5 
   },
-  {
-    question: "Est-ce gratuit ?",
-    answer:
-      "Oui, l'ajout de contacts et l'exportation en VCF sont totalement gratuits, pour vous aider à faire croître votre communauté sans barrières.",
+  { 
+    name: "Zainab", 
+    role: "Marketeuse", 
+    result: "La communauté est très active et engagée grâce à cette fonctionnalité. Le fichier VCF m'a permis de partager rapidement mes contacts avec mes collaborateurs et mes clients, et j'ai constaté une nette augmentation des interactions et des vues sur mes statuts WhatsApp. Cela a vraiment boosté mon marketing digital.", 
+    rating: 4 
   },
-  {
-    question: "Est-ce que cela fonctionne dans tous les pays ?",
-    answer:
-      "Oui, tant que votre smartphone ou appareil peut importer un fichier .vcf standard, le service fonctionne partout dans le monde.",
-  },
-  {
-    question: "Comment télécharger et utiliser le fichier VCF ?",
-    answer:
-"Après avoir ajouté vos contacts, cliquez sur le bouton 'Exporter en VCF', téléchargez le fichier sur votre téléphone ou ordinateur, ouvrez le fichier VCF pour que tous les numéros soient automatiquement ajoutés à vos contacts, et vous êtes maintenant prêt à partager votre numéro et augmenter vos vues WhatsApp.",
+  { 
+    name: "Joseph", 
+    role: "Entrepreneur", 
+    result: "Mes vues sur WhatsApp ont considérablement augmenté depuis que j'utilise le fichier VCF de Ralph. Tous mes contacts ont été ajoutés facilement, et j'ai pu toucher un public beaucoup plus large que jamais. Ce service est simple, rapide et fiable, et il a un impact réel sur le développement de mon entreprise.", 
+    rating: 5 
   },
 ];
+
 
 export default function Home() {
   const [count, setCount] = useState(0);
