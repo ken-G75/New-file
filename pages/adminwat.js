@@ -1,209 +1,317 @@
-"use client"
 
-import React, { useState, useEffect } from "react"
-import { motion } from "framer-motion"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Users, Mail, Shield, LogOut, BarChart3, TrendingUp, Download } from "lucide-react"
+import { useEffect, useState } from "react";
+import {
+Shield,
+Trash2,
+Download,
+FileText,
+LogOut,
+MessageCircle,
+X,
+} from "lucide-react";
 
-export default function AdminPage() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [form, setForm] = useState({ username: "", password: "" })
-  const [messages, setMessages] = useState([])
-  const [contacts, setContacts] = useState([])
+export default function Admin() {
+const [authed, setAuthed] = useState(false);
+const [contacts, setContacts] = useState([]);
+const [messages, setMessages] = useState([]);
+const [showMessages, setShowMessages] = useState(false);
+const [user, setUser] = useState("");
+const [pass, setPass] = useState("");
+const [loading, setLoading] = useState(false);
 
-  // 🔄 Ranmase done nan localStorage
-  useEffect(() => {
-    const storedMessages = JSON.parse(localStorage.getItem("messages") || "[]")
-    const storedContacts = JSON.parse(localStorage.getItem("contacts") || "[]")
-    setMessages(storedMessages)
-    setContacts(storedContacts)
-  }, [isAuthenticated]) // rechargé après login
+async function checkAuth() {
+try {
+const res = await fetch("/api/admin/check");
+const ok = res.ok;
+setAuthed(ok);
+return ok;
+} catch (err) {
+console.error("checkAuth error:", err);
+setAuthed(false);
+return false;
+}
+}
 
-  const stats = {
-    totalMessages: messages.length,
-    totalContacts: contacts.length,
-    newMessages: messages.length > 0 ? 1 : 0,
-    readRate: messages.length > 0 ? "80%" : "0%",
-  }
+useEffect(() => {
+(async () => {
+const ok = await checkAuth();
+if (ok) {
+await loadContacts();
+await loadMessages();
+}
+})();
+}, []);
 
-  // Export VCF
-  const exportVCF = () => {
-    let vcfData = ""
-    contacts.forEach(c => {
-      vcfData += `BEGIN:VCARD\nVERSION:3.0\nFN:${c.name}\nTEL:${c.phone}\nEND:VCARD\n`
-    })
-    const blob = new Blob([vcfData], { type: "text/vcard" })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement("a")
-    a.href = url
-    a.download = "contacts.vcf"
-    a.click()
-  }
+async function login(e) {
+e.preventDefault();
+setLoading(true);
+try {
+const res = await fetch("/api/admin/login", {
+method: "POST",
+headers: { "content-type": "application/json" },
+body: JSON.stringify({ username: user, password: pass }),
+});
+setLoading(false);
+if (res.ok) {
+setAuthed(true);
+await loadContacts();
+await loadMessages();
+} else {
+const j = await res.json().catch(() => ({}));
+alert(j?.error || "Login failed");
+}
+} catch (err) {
+setLoading(false);
+console.error("login error:", err);
+alert("Login failed (network)");
+}
+}
 
-  // Export CSV
-  const exportCSV = () => {
-    const headers = ["Nom", "Email", "Sujet", "Message"]
-    const rows = messages.map(m => [m.name, m.email, m.subject, m.message])
-    const csv = [headers, ...rows].map(e => e.join(",")).join("\n")
-    const blob = new Blob([csv], { type: "text/csv" })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement("a")
-    a.href = url
-    a.download = "messages.csv"
-    a.click()
-  }
+async function logout() {
+await fetch("/api/admin/logout", { method: "POST" });
+setAuthed(false);
+setContacts([]);
+setMessages([]);
+}
 
-  // Login
-  const handleLogin = (e) => {
-    e.preventDefault()
-    if (form.username === "admin" && form.password === "kerventz2000") {
-      setIsAuthenticated(true)
-    } else {
-      alert("❌ Identifiants incorrects")
-    }
-  }
+async function loadContacts() {
+try {
+const res = await fetch("/api/contacts");
+const j = await res.json().catch(() => null);
+console.log("GET /api/contacts", res.status, j);
 
-  const handleLogout = () => setIsAuthenticated(false)
+if (!res.ok) {
+console.error("Failed to fetch contacts", j);
+setContacts([]);
+return;
+}
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0D1117] text-white">
-        <Card className="w-full max-w-md bg-[#161B22] border border-[#30363D] shadow-2xl">
-          <CardHeader>
-            <CardTitle className="text-center text-[#2FD771] text-2xl font-bold">
-              🛡️ Accès Admin
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleLogin} className="space-y-4">
-              <Input
-                placeholder="Nom d'utilisateur"
-                className="bg-[#21262D] border-[#30363D] text-white"
-                value={form.username}
-                onChange={(e) => setForm({ ...form, username: e.target.value })}
-              />
-              <Input
-                type="password"
-                placeholder="Mot de passe"
-                className="bg-[#21262D] border-[#30363D] text-white"
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-              />
-              <Button
-                type="submit"
-                className="w-full bg-gradient-to-r from-[#2FD771] to-[#26C65A] text-[#0D1117] font-bold"
-              >
-                <Shield className="w-4 h-4 mr-2" /> Connexion
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
+const maybeArray =
+j?.ralph_xpert ?? j?.contacts ?? j?.data ?? j ?? null;
 
-  return (
-    <div className="min-h-screen bg-[#0D1117] text-white p-6">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-[#2FD771] flex items-center gap-2">
-          <Shield className="w-5 h-5" /> Ralph Xpert - Admin
-        </h1>
-        <Button onClick={handleLogout} className="bg-red-600 hover:bg-red-700 text-white">
-          <LogOut className="w-4 h-4 mr-2" /> Déconnexion
-        </Button>
-      </div>
+const finalArray = Array.isArray(maybeArray)
+? maybeArray
+: Array.isArray(maybeArray?.data)
+? maybeArray.data
+: [];
 
-      {/* Tabs */}
-      <Tabs defaultValue="overview">
-        <TabsList className="bg-[#161B22] border border-[#30363D] p-2 rounded-lg">
-          <TabsTrigger value="overview"><BarChart3 className="w-4 h-4 mr-2" />Vue d'ensemble</TabsTrigger>
-          <TabsTrigger value="messages"><Mail className="w-4 h-4 mr-2" />Messages</TabsTrigger>
-          <TabsTrigger value="contacts"><Users className="w-4 h-4 mr-2" />Contacts</TabsTrigger>
-          <TabsTrigger value="analytics"><TrendingUp className="w-4 h-4 mr-2" />Analytics</TabsTrigger>
-        </TabsList>
+setContacts(finalArray);
+} catch (err) {
+console.error("loadContacts error:", err);
+setContacts([]);
+}
 
-        {/* Overview */}
-        <TabsContent value="overview" className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[
-            { label: "Total Messages", value: stats.totalMessages, icon: Mail },
-            { label: "Nouveaux Messages", value: stats.newMessages, icon: Mail },
-            { label: "Total Contacts", value: stats.totalContacts, icon: Users },
-            { label: "Taux de Lecture", value: stats.readRate, icon: TrendingUp },
-          ].map((item, i) => (
-            <motion.div
-              key={i}
-              whileHover={{ scale: 1.05 }}
-              className="bg-[#161B22] border border-[#30363D] rounded-xl p-6 shadow-lg"
-            >
-              <div className="flex items-center gap-3">
-                <item.icon className="w-6 h-6 text-[#2FD771]" />
-                <div>
-                  <p className="text-sm text-[#7D8590]">{item.label}</p>
-                  <p className="text-xl font-bold">{item.value}</p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </TabsContent>
+}
 
-        {/* Messages */}
-        <TabsContent value="messages" className="mt-6 space-y-4">
-          <Button onClick={exportCSV} className="bg-[#2FD771] text-[#0D1117] font-bold">
-            <Download className="w-4 h-4 mr-2" /> Exporter en CSV
-          </Button>
-          <Card className="bg-[#161B22] border border-[#30363D]">
-            <CardHeader><CardTitle>📧 Liste des Messages</CardTitle></CardHeader>
-            <CardContent>
-              {messages.length === 0 ? (
-                <p className="text-gray-400">Aucun message pour le moment</p>
-              ) : (
-                messages.map((m, i) => (
-                  <div key={i} className="p-3 border-b border-[#30363D]">
-                    <p><b>Nom:</b> {m.name}</p>
-                    <p><b>Email:</b> {m.email}</p>
-                    <p><b>Sujet:</b> {m.subject}</p>
-                    <p><b>Message:</b> {m.message}</p>
-                  </div>
-                ))
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
+async function loadMessages() {
+try {
+const res = await fetch("/api/messages");
+const j = await res.json().catch(() => null);
+if (!res.ok) {
+console.error("Failed to fetch messages", j);
+setMessages([]);
+return;
+}
+setMessages(j?.messages ?? []);
+} catch (err) {
+console.error("loadMessages error:", err);
+setMessages([]);
+}
+}
 
-        {/* Contacts */}
-        <TabsContent value="contacts" className="mt-6 space-y-4">
-          <Button onClick={exportVCF} className="bg-[#2FD771] text-[#0D1117] font-bold">
-            <Download className="w-4 h-4 mr-2" /> Télécharger VCF
-          </Button>
-          <Card className="bg-[#161B22] border border-[#30363D]">
-            <CardHeader><CardTitle>📞 Liste des Contacts</CardTitle></CardHeader>
-            <CardContent>
-              {contacts.length === 0 ? (
-                <p className="text-gray-400">Aucun contact pour le moment</p>
-              ) : (
-                contacts.map((c, i) => (
-                  <div key={i} className="p-3 border-b border-[#30363D]">
-                    <p><b>Nom:</b> {c.name}</p>
-                    <p><b>Téléphone:</b> {c.phone}</p>
-                  </div>
-                ))
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
+async function markMessagesRead() {
+try {
+await fetch("/api/messages/read", { method: "POST" });
+setMessages((prev) => prev.map((m) => ({ ...m, read: true })));
+} catch (err) {
+console.error("markMessagesRead error:", err);
+}
+}
 
-        {/* Analytics */}
-        <TabsContent value="analytics" className="mt-6">
-          <Card className="bg-[#161B22] border border-[#30363D]">
-            <CardHeader><CardTitle>📊 Analytics</CardTitle></CardHeader>
-            <CardContent>Bientôt disponible...</CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
-  )
-    }
+async function deleteOne(id) {
+if (!confirm("Delete contact?")) return;
+const res = await fetch("/api/delete", {
+method: "POST",
+headers: { "content-type": "application/json" },
+body: JSON.stringify({ id }),
+});
+if (res.ok) loadContacts();
+else alert("Failed");
+}
+
+async function deleteAll() {
+if (!confirm("Delete ALL contacts?")) return;
+const res = await fetch("/api/deleteAll", { method: "POST" });
+if (res.ok) loadContacts();
+else alert("Failed");
+}
+
+function downloadVCF() {
+window.location.href = "/api/export-vcf";
+}
+function downloadPDF() {
+window.location.href = "/api/export-pdf";
+}
+
+const unreadCount = messages.filter((m) => !m.read).length;
+
+if (!authed) {
+return (
+
+<div className="max-w-sm mx-auto px-4 py-8">  
+<h2 className="text-2xl font-bold inline-flex items-center gap-2">  
+<Shield size={18} /> Admin Login  
+</h2>  
+<form onSubmit={login} className="mt-4 grid gap-3">  
+<input  
+placeholder="username"  
+value={user}  
+onChange={(e) => setUser(e.target.value)}  
+className="px-4 py-3 rounded-xl bg-bgsoft border border-white/10"  
+/>  
+<input  
+placeholder="password"  
+type="password"  
+value={pass}  
+onChange={(e) => setPass(e.target.value)}  
+className="px-4 py-3 rounded-xl bg-bgsoft border border-white/10"  
+/>  
+<button type="submit" className="btn-primary px-4 py-2 rounded-2xl">  
+{loading ? "..." : "Login"}  
+</button>  
+</form>  
+</div>  
+);  
+}  return (
+
+<div className="max-w-6xl mx-auto px-4 py-8">  
+<div className="flex items-center justify-between">  
+<h2 className="text-2xl font-bold inline-flex items-center gap-2">  
+<Shield size={18} /> Admin Dashboard  
+</h2>  
+<div className="flex items-center gap-2">  
+<button    
+onClick={downloadVCF}    
+className="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-white/10"    
+>  
+<Download size={16} /> Download VCF  
+</button>  
+<button    
+onClick={downloadPDF}    
+className="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-white/10"    
+>  
+<FileText size={16} /> Download PDF  
+</button>  
+<button    
+onClick={deleteAll}    
+className="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-white/10"    
+>  
+<Trash2 size={16} /> Delete All  
+</button>  
+<button    
+onClick={logout}    
+className="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-white/10"    
+>  
+<LogOut size={16} /> Logout  
+</button>  
+</div>  
+</div>  {/* Contacts table */}
+
+  <div className="mt-6 card rounded-2xl overflow-hidden">    
+    <table className="w-full text-sm">    
+      <thead className="text-left text-gray-300/80">    
+        <tr>    
+          <th className="px-4 py-2">#</th>    
+          <th className="px-4 py-2">Name</th>    
+          <th className="px-4 py-2">Phone</th>    
+          <th className="px-4 py-2">Created</th>    
+          <th className="px-4 py-2">Action</th>    
+        </tr>    
+      </thead>    
+      <tbody>    
+        {contacts.map((c, i) => (    
+          <tr key={c.id ?? i} className="odd:bg-white/[0.02]">    
+            <td className="px-4 py-2">{i + 1}</td>    
+            <td className="px-4 py-2">{c.name}</td>    
+            <td className="px-4 py-2">{c.phone}</td>    
+            <td className="px-4 py-2">    
+              {c.created_at    
+                ? new Date(c.created_at).toLocaleString()    
+                : "-"}    
+            </td>    
+            <td className="px-4 py-2">    
+              <button    
+                onClick={() => deleteOne(c.id)}    
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/10"    
+              >    
+                <Trash2 size={14} /> Delete    
+              </button>    
+            </td>    
+          </tr>    
+        ))}    
+        {contacts.length === 0 && (    
+          <tr>    
+            <td    
+              colSpan={5}    
+              className="px-4 py-8 text-center text-gray-400"    
+            >    
+              No contacts yet.    
+            </td>    
+          </tr>    
+        )}    
+      </tbody>    
+    </table>    
+  </div>    {/* Floating Messages Button */}
+
+  <div className="fixed bottom-6 right-6">    
+    <button    
+      onClick={() => {    
+        setShowMessages(!showMessages);    
+        if (!showMessages) markMessagesRead();    
+      }}    
+      className="relative bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg"    
+    >    
+      <MessageCircle size={24} />    
+      {unreadCount > 0 && (    
+        <span className="absolute -top-1 -right-1 bg-red-600 text-xs font-bold px-2 py-0.5 rounded-full">    
+          {unreadCount}    
+        </span>    
+      )}    
+    </button>    
+  </div>    {/* Popup for messages */}
+{showMessages && (
+<div className="fixed bottom-20 right-6 w-96 max-h-[70vh] bg-bgsoft border border-white/10 rounded-2xl shadow-lg overflow-y-auto">
+<div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
+<h3 className="font-bold">Messages</h3>
+<button onClick={() => setShowMessages(false)}>
+<X size={18} />
+</button>
+</div>
+<div>
+{messages.length === 0 ? (
+<p className="p-4 text-gray-400 text-sm">No messages yet.</p>
+) : (
+messages.map((m, i) => (
+<div key={m.id ?? i} className="p-4 border-b border-white/5">
+<p className="font-semibold">
+{m.name} ({m.email})
+</p>
+<p className="text-sm text-gray-400">{m.phone}</p>
+<p className="text-sm text-gray-300 mt-2">{m.topic}</p>
+<p className="mt-2">{m.message}</p>
+<p className="text-xs text-gray-500 mt-1">
+{m.created_at
+? new Date(m.created_at).toLocaleString()
+: "-"}
+</p>
+</div>
+))
+)}
+</div>
+</div>
+)}
+
+</div>  );
+}
+
+
