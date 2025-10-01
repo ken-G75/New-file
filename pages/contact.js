@@ -1,12 +1,16 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Mail, Phone, MessageCircle, Clock, ArrowLeft } from "lucide-react"
 import Link from "next/link"
@@ -51,7 +55,7 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [message, setMessage] = useState({ type: "", content: "" })
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     if (!formData.nom || !formData.email || !formData.sujet || !formData.message) {
@@ -61,36 +65,39 @@ export default function ContactPage() {
 
     setIsSubmitting(true)
 
-    const response = await apiClient.saveMessage(
-      formData.nom,
-      formData.email,
-      formData.telephone,
-      formData.sujet,
-      formData.message,
-    )
+    try {
+      const response = await apiClient.saveMessage(
+        formData.nom,
+        formData.email,
+        formData.telephone,
+        formData.sujet,
+        formData.message
+      )
 
-    if (response.success) {
-      setMessage({
-        type: "success",
-        content: "✅ Merci ! Votre message a été envoyé avec succès. Nous vous répondrons sous 24h.",
-      })
+      if (response.success) {
+        setMessage({
+          type: "success",
+          content: "✅ Merci ! Votre message a été envoyé avec succès. Nous vous répondrons sous 24h.",
+        })
 
-      const currentFormData = { ...formData }
-      setFormData({ nom: "", email: "", telephone: "", sujet: "", message: "" })
+        const currentFormData = { ...formData }
+        setFormData({ nom: "", email: "", telephone: "", sujet: "", message: "" })
 
-      // Offer WhatsApp option
-      setTimeout(() => {
-        if (confirm("Voulez-vous également envoyer ce message via WhatsApp pour une réponse plus rapide ?")) {
-          const whatsappMessage = `Bonjour Ralph Xpert,\n\nNom: ${currentFormData.nom}\nEmail: ${currentFormData.email}\nSujet: ${currentFormData.sujet}\n\nMessage: ${currentFormData.message}`
-          const whatsappUrl = `https://wa.me/18494597173?text=${encodeURIComponent(whatsappMessage)}`
-          window.open(whatsappUrl, "_blank")
-        }
-      }, 2000)
-    } else {
-      setMessage({ type: "error", content: response.error || "Une erreur est survenue. Veuillez réessayer." })
+        setTimeout(() => {
+          if (confirm("Voulez-vous également envoyer ce message via WhatsApp pour une réponse plus rapide ?")) {
+            const whatsappMessage = `Bonjour Ralph Xpert,\n\nNom: ${currentFormData.nom}\nEmail: ${currentFormData.email}\nSujet: ${currentFormData.sujet}\n\nMessage: ${currentFormData.message}`
+            const whatsappUrl = `https://wa.me/18494597173?text=${encodeURIComponent(whatsappMessage)}`
+            window.open(whatsappUrl, "_blank")
+          }
+        }, 2000)
+      } else {
+        setMessage({ type: "error", content: response.error || "Une erreur est survenue. Veuillez réessayer." })
+      }
+    } catch (err) {
+      setMessage({ type: "error", content: "Une erreur est survenue. Veuillez réessayer." })
+    } finally {
+      setIsSubmitting(false)
     }
-
-    setIsSubmitting(false)
   }
 
   return (
@@ -139,69 +146,17 @@ export default function ContactPage() {
               )}
 
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-[#2FD771] font-semibold mb-2">Nom complet *</label>
-                  <Input
-                    placeholder="Votre nom complet"
-                    value={formData.nom}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, nom: e.target.value }))}
-                    className="bg-[#21262D] border-[#30363D] text-white"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[#2FD771] font-semibold mb-2">Email *</label>
-                  <Input
-                    type="email"
-                    placeholder="votre@email.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
-                    className="bg-[#21262D] border-[#30363D] text-white"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[#2FD771] font-semibold mb-2">Téléphone</label>
-                  <Input
-                    type="tel"
-                    placeholder="+509 1234 5678"
-                    value={formData.telephone}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, telephone: e.target.value }))}
-                    className="bg-[#21262D] border-[#30363D] text-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[#2FD771] font-semibold mb-2">Sujet *</label>
-                  <Select
-                    value={formData.sujet}
-                    onValueChange={(value) => setFormData((prev) => ({ ...prev, sujet: value }))}
-                  >
-                    <SelectTrigger className="bg-[#21262D] border-[#30363D] text-white">
-                      <SelectValue placeholder="Choisissez un sujet" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-[#21262D] border-[#30363D]">
-                      {subjects.map((subject) => (
-                        <SelectItem key={subject.value} value={subject.value} className="text-white">
-                          {subject.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <label className="block text-[#2FD771] font-semibold mb-2">Message *</label>
-                  <Textarea
-                    placeholder="Décrivez votre demande en détail..."
-                    value={formData.message}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
-                    className="bg-[#21262D] border-[#30363D] text-white min-h-[120px]"
-                    required
-                  />
-                </div>
+                <InputField label="Nom complet *" value={formData.nom} onChange={(val) => setFormData({ ...formData, nom: val })} />
+                <InputField label="Email *" type="email" value={formData.email} onChange={(val) => setFormData({ ...formData, email: val })} />
+                <InputField label="Téléphone" type="tel" value={formData.telephone} onChange={(val) => setFormData({ ...formData, telephone: val })} />
+                <SelectField label="Sujet *" value={formData.sujet} onChange={(val) => setFormData({ ...formData, sujet: val })} options={subjects} />
+                <Textarea
+                  placeholder="Décrivez votre demande en détail..."
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  className="bg-[#21262D] border-[#30363D] text-white min-h-[120px]"
+                  required
+                />
 
                 <Button
                   type="submit"
@@ -221,99 +176,121 @@ export default function ContactPage() {
               <p className="text-[#C9D1D9]">Plusieurs moyens de nous joindre selon vos préférences.</p>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center gap-4 p-4 bg-[#21262D] rounded-lg border-l-4 border-[#2FD771] hover:transform hover:translateX-1 transition-all">
-                <Mail className="w-6 h-6 text-[#2FD771]" />
-                <div>
-                  <h3 className="text-[#2FD771] font-semibold">Email</h3>
-                  <p className="text-white">elogekenguer@gmail.com</p>
-                  <small className="text-[#7D8590]">Réponse sous 24h</small>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 p-4 bg-[#21262D] rounded-lg border-l-4 border-[#2FD771] hover:transform hover:translateX-1 transition-all">
-                <Phone className="w-6 h-6 text-[#2FD771]" />
-                <div>
-                  <h3 className="text-[#2FD771] font-semibold">Téléphone</h3>
-                  <p className="text-white">+1 849 459 7173</p>
-                  <small className="text-[#7D8590]">Lun-Ven 9h-18h</small>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 p-4 bg-[#21262D] rounded-lg border-l-4 border-[#2FD771] hover:transform hover:translateX-1 transition-all">
-                <MessageCircle className="w-6 h-6 text-[#2FD771]" />
-                <div>
-                  <h3 className="text-[#2FD771] font-semibold">WhatsApp</h3>
-                  <p className="text-white">+1 849 459 7173</p>
-                  <small className="text-[#7D8590]">24/7 Disponible</small>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 p-4 bg-[#21262D] rounded-lg border-l-4 border-[#2FD771] hover:transform hover:translateX-1 transition-all">
-                <Clock className="w-6 h-6 text-[#2FD771]" />
-                <div>
-                  <h3 className="text-[#2FD771] font-semibold">Horaires</h3>
-                  <p className="text-white">9h - 18h</p>
-                  <small className="text-[#7D8590]">Du lundi au vendredi</small>
-                </div>
-              </div>
+              <ContactInfo icon={Mail} title="Email" info="elogekenguer@gmail.com" sub="Réponse sous 24h" />
+              <ContactInfo icon={Phone} title="Téléphone" info="+1 849 459 7173" sub="Lun-Ven 9h-18h" />
+              <ContactInfo icon={MessageCircle} title="WhatsApp" info="+1 849 459 7173" sub="24/7 Disponible" />
+              <ContactInfo icon={Clock} title="Horaires" info="9h - 18h" sub="Du lundi au vendredi" />
             </CardContent>
           </Card>
         </div>
 
         {/* Quick Actions */}
-        <Card className="bg-[#161B22] border-[#30363D] mt-8 max-w-4xl mx-auto">
-          <CardHeader>
-            <CardTitle className="text-[#2FD771] text-xl text-center">🚀 Actions rapides</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <a
-                href="https://wa.me/18494597173"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#21262D] to-[#30363D] hover:from-[#2FD771] hover:to-[#26C65A] hover:text-[#0D1117] text-white px-6 py-3 rounded-lg font-semibold transition-all"
-              >
-                💬 WhatsApp Direct
-              </a>
-              <a
-                href="tel:+18494597173"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#21262D] to-[#30363D] hover:from-[#2FD771] hover:to-[#26C65A] hover:text-[#0D1117] text-white px-6 py-3 rounded-lg font-semibold transition-all"
-              >
-                📞 Appeler maintenant
-              </a>
-              <a
-                href="mailto:elogekenguer@gmail.com"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#21262D] to-[#30363D] hover:from-[#2FD771] hover:to-[#26C65A] hover:text-[#0D1117] text-white px-6 py-3 rounded-lg font-semibold transition-all"
-              >
-                📧 Envoyer un email
-              </a>
-              <Link
-                href="/"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#21262D] to-[#30363D] hover:from-[#2FD771] hover:to-[#26C65A] hover:text-[#0D1117] text-white px-6 py-3 rounded-lg font-semibold transition-all"
-              >
-                🏠 Retour à l'accueil
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
+        <QuickActions />
 
         {/* FAQ */}
-        <Card className="bg-[#161B22] border-[#30363D] mt-8 max-w-4xl mx-auto">
-          <CardHeader>
-            <CardTitle className="text-[#2FD771] text-xl text-center">❓ Questions fréquentes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {faqs.map((faq, index) => (
-                <div key={index} className="border-b border-[#30363D] pb-4">
-                  <h3 className="text-[#2FD771] font-semibold mb-2">{faq.question}</h3>
-                  <p className="text-[#C9D1D9]">{faq.answer}</p>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        <FAQSection faqs={faqs} />
       </div>
     </div>
   )
-      }
+}
+
+// --- Helper Components
+
+const InputField = ({ label, value, onChange, type = "text" }) => (
+  <div>
+    <label className="block text-[#2FD771] font-semibold mb-2">{label}</label>
+    <Input
+      type={type}
+      placeholder={label}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="bg-[#21262D] border-[#30363D] text-white"
+      required={label.includes("*")}
+    />
+  </div>
+)
+
+const SelectField = ({ label, value, onChange, options }) => (
+  <div>
+    <label className="block text-[#2FD771] font-semibold mb-2">{label}</label>
+    <Select value={value} onValueChange={onChange}>
+      <SelectTrigger className="bg-[#21262D] border-[#30363D] text-white">
+        <SelectValue placeholder="Choisissez un sujet" />
+      </SelectTrigger>
+      <SelectContent className="bg-[#21262D] border-[#30363D]">
+        {options.map((opt) => (
+          <SelectItem key={opt.value} value={opt.value} className="text-white">
+            {opt.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  </div>
+)
+
+const ContactInfo = ({ icon: Icon, title, info, sub }) => (
+  <div className="flex items-center gap-4 p-4 bg-[#21262D] rounded-lg border-l-4 border-[#2FD771] hover:transform hover:translateX-1 transition-all">
+    <Icon className="w-6 h-6 text-[#2FD771]" />
+    <div>
+      <h3 className="text-[#2FD771] font-semibold">{title}</h3>
+      <p className="text-white">{info}</p>
+      <small className="text-[#7D8590]">{sub}</small>
+    </div>
+  </div>
+)
+
+const QuickActions = () => (
+  <Card className="bg-[#161B22] border-[#30363D] mt-8 max-w-4xl mx-auto">
+    <CardHeader>
+      <CardTitle className="text-[#2FD771] text-xl text-center">🚀 Actions rapides</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div className="flex flex-wrap gap-4 justify-center">
+        <a
+          href="https://wa.me/18494597173"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 bg-gradient-to-r from-[#21262D] to-[#30363D] hover:from-[#2FD771] hover:to-[#26C65A] hover:text-[#0D1117] text-white px-6 py-3 rounded-lg font-semibold transition-all"
+        >
+          💬 WhatsApp Direct
+        </a>
+        <a
+          href="tel:+18494597173"
+          className="inline-flex items-center gap-2 bg-gradient-to-r from-[#21262D] to-[#30363D] hover:from-[#2FD771] hover:to-[#26C65A] hover:text-[#0D1117] text-white px-6 py-3 rounded-lg font-semibold transition-all"
+        >
+          📞 Appeler maintenant
+        </a>
+        <a
+          href="mailto:elogekenguer@gmail.com"
+          className="inline-flex items-center gap-2 bg-gradient-to-r from-[#21262D] to-[#30363D] hover:from-[#2FD771] hover:to-[#26C65A] hover:text-[#0D1117] text-white px-6 py-3 rounded-lg font-semibold transition-all"
+        >
+          📧 Envoyer un email
+        </a>
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 bg-gradient-to-r from-[#21262D] to-[#30363D] hover:from-[#2FD771] hover:to-[#26C65A] hover:text-[#0D1117] text-white px-6 py-3 rounded-lg font-semibold transition-all"
+        >
+          🏠 Retour à l'accueil
+        </Link>
+      </div>
+    </CardContent>
+  </Card>
+)
+
+const FAQSection = ({ faqs }) => (
+  <Card className="bg-[#161B22] border-[#30363D] mt-8 max-w-4xl mx-auto">
+    <CardHeader>
+      <CardTitle className="text-[#2FD771] text-xl text-center">❓ Questions fréquentes</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div className="space-y-4">
+        {faqs.map((faq, index) => (
+          <div key={index} className="border-b border-[#30363D] pb-4">
+            <h3 className="text-[#2FD771] font-semibold mb-2">{faq.question}</h3>
+            <p className="text-[#C9D1D9]">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </CardContent>
+  </Card>
+)
