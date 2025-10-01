@@ -216,7 +216,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* CONTACT SECTION */}
+{/* CONTACT SECTION */}
       <div className="mt-20">
         <div className="bg-green-600 text-center py-10 rounded-2xl shadow">
           <h2 className="text-3xl font-bold flex justify-center items-center gap-2">
@@ -228,47 +228,20 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="card mt-8 p-8 rounded-2xl">
-          <h3 className="text-xl font-semibold flex items-center gap-2 text-green-400">
-            <MessageCircle /> Send us a message
+        {/* 👉 Bouton kontakte olye de form */}
+        <div className="card mt-8 p-8 rounded-2xl text-center">
+          <h3 className="text-xl font-semibold flex justify-center items-center gap-2 text-green-400">
+            <MessageCircle /> Contact us directly
           </h3>
           <p className="text-gray-300 mb-6">
-            Fill out the form below and we will get back to you as soon as
-            possible.
+            Click the button below to contact our team.
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Form inputs are unchanged... */}
-            <div>
-              <label className="block mb-1 text-sm">Full name *</label>
-              <input type="text" name="full_name" value={formData.full_name} onChange={handleChange} placeholder="Your full name" className="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-700" />
-            </div>
-            <div>
-              <label className="block mb-1 text-sm">Email *</label>
-              <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="your@email.com" className="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-700" />
-            </div>
-            <div>
-              <label className="block mb-1 text-sm">Phone</label>
-              <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+509 1234 5678" className="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-700" />
-            </div>
-            <div>
-              <label className="block mb-1 text-sm">Subject *</label>
-              <select name="subject" value={formData.subject} onChange={handleChange} className="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-700" >
-                <option value="">Choose a topic</option>
-                <option>General Inquiry</option>
-                <option>Project Discussion</option>
-                <option>Support</option>
-              </select>
-            </div>
-            <div>
-              <label className="block mb-1 text-sm">Message *</label>
-              <textarea name="message" value={formData.message} onChange={handleChange} placeholder="Describe your request in detail..." rows="4" className="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-700" ></textarea>
-            </div>
-            <button type="submit" className="bg-green-600 w-full py-3 rounded-xl font-semibold hover:bg-green-700 transition" >
-              📩 Send message
+          <Link href="/contact">
+            <button className="bg-green-600 w-full py-3 rounded-xl font-semibold hover:bg-green-700 transition flex items-center justify-center gap-2">
+              📞 Contacter nous
             </button>
-            {status && <p className="mt-2 text-sm text-gray-300">{status}</p>}
-          </form>
+          </Link>
         </div>
       </div>
       
