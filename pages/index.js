@@ -1,4 +1,4 @@
-import Link from "next/link";
+elogekenguer@gmail.comimport Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion"; // Added AnimatePresence
 import {
   Zap,
@@ -302,10 +302,68 @@ export default function Home() {
       {/* ======================= NEW FOOTER SECTION ======================= */}
       {/* ================================================================== */}
 
-      <footer className="mt-20 py-8 text-center text-gray-500 text-sm">
-        <p>Copyright 2025© || Powered by Benfei Tech </p>
-      </footer>
 
-    </div> // This closes the main container div
-  );
-}
+
+      <footer className="bg-gradient-to-r from-[#161B22] to-[#21262D] border-t border-[#30363D]">  
+    <div className="container mx-auto px-4 py-12">  
+      <div className="grid md:grid-cols-3 gap-8">  
+        <div>  
+          <h2 className="text-[#2FD771] font-bold text-xl mb-4">RALPH XPERT PROGRAMME</h2>  
+          <p className="text-[#C9D1D9] text-sm">  
+            La plateforme de référence pour développer votre réseau WhatsApp et maximiser l'impact de vos statuts.  
+          </p>  
+        </div>  
+
+        <div>  
+          <h3 className="text-[#2FD771] font-bold mb-4">Services</h3>  
+          <ul className="space-y-2 text-[#C9D1D9] text-sm">  
+            <li>Boost de contacts</li>  
+            <li>Vues de statut</li>  
+            <li>Analytics avancées</li>  
+            <li>Formation premium</li>  
+          </ul>  
+        </div>  
+
+        <div>  
+          <h3 className="text-[#2FD771] font-bold mb-4">Contact & Support</h3>  
+          <div className="space-y-2 text-[#C9D1D9] text-sm">  
+            <div className="flex items-center gap-2">  
+              <Mail className="w-4 h-4" />  
+              <a href="mailto:elogekenguer@gmail.com" className="hover:text-[#2FD771]">  
+                elogekenguer@gmail.com  
+              </a>  
+            </div>  
+            <div className="flex items-center gap-2">  
+              <Phone className="w-4 h-4" />  
+              <a href="tel:+18494597173" className="hover:text-[#2FD771]">  
+                +1 849 459 7173  
+              </a>  
+            </div>  
+            <div className="flex items-center gap-2">  
+              <MessageCircle className="w-4 h-4" />  
+              <a  
+                href="https://wa.me/18494597173"  
+                target="_blank"  
+                rel="noopener noreferrer"  
+                className="hover:text-[#2FD771]"  
+              >  
+                WhatsApp 24/7 Disponible  
+              </a>  
+            </div>  
+          </div>  
+        </div>  
+      </div>  
+
+      <div className="border-t border-[#30363D] mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center text-[#7D8590] text-sm">  
+        <span>© 2025 RALPH XPERT PROGRAMME. Tous droits réservés.</span>  
+        <span>  
+          Créé par <strong>Mr RALPH</strong>  
+        </span>  
+      </div>  
+    </div>  
+  </footer>  
+</div>
+
+)
+                  }
+        
