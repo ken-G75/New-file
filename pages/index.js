@@ -39,10 +39,10 @@ const faqData = [
   {
     question: "Comment télécharger et utiliser le fichier VCF ?",
     answer:
-      "📥 Étape 1 : Après avoir ajouté vos contacts, cliquez sur le bouton 'Exporter en VCF'.\n" +
-      "💾 Étape 2 : Téléchargez le fichier sur votre téléphone ou ordinateur.\n" +
-      "📱 Étape 3 : Ouvrez le fichier VCF pour que tous les numéros soient automatiquement ajoutés à vos contacts.\n" +
-      "✅ Étape 4 : Vous êtes maintenant prêt à partager votre numéro et augmenter vos vues WhatsApp.",
+      Après avoir ajouté vos contacts, cliquez sur le bouton 'Exporter en VCF'.\n" +
+       Téléchargez le fichier sur votre téléphone ou ordinateur.\n" +
+      Ouvrez le fichier VCF pour que tous les numéros soient automatiquement ajoutés à vos contacts.\n" +
+      Vous êtes maintenant prêt à partager votre numéro et augmenter vos vues WhatsApp.",
   },
 ];
 
