@@ -319,24 +319,12 @@ export default function Home() {
         </div>
       </div>
 
-  {/* CTA Section */}  
-  <section className="container mx-auto px-4 py-16">  
-    <Card className="bg-gradient-to-r from-[#2FD771] to-[#26C65A] text-[#0D1117]">  
-      <CardContent className="p-8 text-center">  
-        <h2 className="text-2xl font-bold mb-4">🚀 Augmentez votre visibilité dès aujourd'hui</h2>  
-        <p className="mb-6 max-w-md mx-auto">  
-          Rejoignez des centaines de créateurs qui utilisent déjà Ralph Xpert pour faire rayonner leur activité sur  
-          WhatsApp et ailleurs.  
-        </p>  
-        <Link href="/contact">  
-          <Button className="bg-[#0D1117] text-[#2FD771] hover:bg-[#161B22] font-bold">  
-            📞 Contacter nous dès aujourd'hui  
-          </Button>  
-        </Link>  
-      </CardContent>  
-    </Card>  
-  </section>
-      
+<Link href="/contact">
+  <Button className="bg-[#0D1117] text-[#2FD771] hover:bg-[#161B22] font-bold">
+    📞 Contacter nous dès aujourd'hui
+  </Button>
+</Link>
+
       {/* ================================================================== */}
       {/* ======================= NEW FOOTER SECTION ======================= */}
       {/* ================================================================== */}
