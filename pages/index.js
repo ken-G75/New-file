@@ -131,7 +131,7 @@ const testimonials = [
       {/* UPLOAD BUTTON */}
       <div className="mt-6">
         <Link
-          href="/Upload"
+          href="/upload"
           className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-lg font-medium shadow-lg hover:shadow-xl hover:scale-105 transition-all"
         >
           <Upload size={18} /> Upload
