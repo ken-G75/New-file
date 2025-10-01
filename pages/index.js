@@ -15,25 +15,34 @@ import { useEffect, useState } from "react";
 
 // --- FAQ Data ---
 const faqData = [
+[
   {
-    question: "How will my views increase with Ralph Xpert?",
+    question: "Comment mes vues vont-elles augmenter avec Ralph Xpert ?",
     answer:
-      "By exporting contacts as a VCF file and sharing it, you allow many people to save your number at once. When they view your WhatsApp status, you get more views, which helps build your audience.",
+      "Exportez vos contacts en fichier VCF et partagez-le. Les personnes qui enregistrent votre numéro verront vos statuts WhatsApp, ce qui augmente vos vues et développe votre audience.",
   },
   {
-    question: "Is my WhatsApp account safe?",
+    question: "Mon compte WhatsApp est-il sécurisé ?",
     answer:
-      "Yes, your account is 100% secure. This service does not require access to your WhatsApp account or any personal information. It only works with the contacts you choose to upload and export.",
+      "Oui, votre compte est entièrement sécurisé. Ralph Xpert n'a aucun accès à votre compte ni à vos informations personnelles. Seuls les contacts que vous choisissez sont utilisés.",
   },
   {
-    question: "Is it free?",
+    question: "Est-ce gratuit ?",
     answer:
-      "Yes, the core features of collecting contacts and exporting them as a VCF file are completely free to use. We believe in helping you grow your community without barriers.",
+      "Oui, l'ajout de contacts et l'exportation en VCF sont totalement gratuits, pour vous aider à faire croître votre communauté sans barrières.",
   },
   {
-    question: "Does this work in all countries?",
+    question: "Est-ce que cela fonctionne dans tous les pays ?",
     answer:
-      "Absolutely. As long as your smartphone or device can import a standard .vcf contact file, our service will work for you, no matter where you are in the world.",
+      "Oui, tant que votre smartphone ou appareil peut importer un fichier .vcf standard, le service fonctionne partout dans le monde.",
+  },
+  {
+    question: "Comment télécharger et utiliser le fichier VCF ?",
+    answer:
+      "📥 Étape 1 : Après avoir ajouté vos contacts, cliquez sur le bouton 'Exporter en VCF'.\n" +
+      "💾 Étape 2 : Téléchargez le fichier sur votre téléphone ou ordinateur.\n" +
+      "📱 Étape 3 : Ouvrez le fichier VCF pour que tous les numéros soient automatiquement ajoutés à vos contacts.\n" +
+      "✅ Étape 4 : Vous êtes maintenant prêt à partager votre numéro et augmenter vos vues WhatsApp.",
   },
 ];
 
@@ -58,12 +67,32 @@ export default function Home() {
     };
   }, []);
 
-  const testimonials = [
-    { name: "Aisha", role: "Product Designer", result: "Got the VCF instantly.", rating: 5 },
-    { name: "Mhuoeka", role: "Software Engineer", result: "Thanks Ralph! With your vcf I'm able to build a WhatsApp audience.", rating: 5 },
-    { name: "Zainab", role: "Marketer", result: "The community is buzzing!", rating: 4 },
-    { name: "Joseph", role: "Business Owner", result: "My WhatsApp views has significantly increased. All thanks to Ralph VCF.", rating: 5 },
-  ];
+const testimonials = [
+  { 
+    name: "the king", 
+    role: "Designer Produit", 
+    result: "J'ai reçu mon fichier VCF immédiatement et sans aucune complication. Cela m'a permis d'ajouter facilement tous mes contacts à mon téléphone et de commencer à partager mon numéro avec ma communauté. Le processus était clair et rapide, ce qui m'a vraiment fait gagner du temps.", 
+    rating: 5 
+  },
+  { 
+    name: "kerventz", 
+    role: "Ingénieur Logiciel", 
+    result: "Grâce au fichier VCF de Ralph, j'ai pu développer efficacement mon audience WhatsApp. La facilité d'importation des contacts m'a permis de me concentrer sur la création de contenu et d'engager mes contacts sans perdre de temps à ajouter manuellement chaque numéro. C'est un outil fiable et pratique.", 
+    rating: 5 
+  },
+  { 
+    name: "Camille", 
+    role: "Marketeuse", 
+    result: "La communauté est très active et engagée grâce à cette fonctionnalité. Le fichier VCF m'a permis de partager rapidement mes contacts avec mes collaborateurs et mes clients, et j'ai constaté une nette augmentation des interactions et des vues sur mes statuts WhatsApp. Cela a vraiment boosté mon marketing digital.", 
+    rating: 4 
+  },
+  { 
+    name: "Joseph", 
+    role: "Entrepreneur", 
+    result: "Mes vues sur WhatsApp ont considérablement augmenté depuis que j'utilise le fichier VCF de Ralph. Tous mes contacts ont été ajoutés facilement, et j'ai pu toucher un public beaucoup plus large que jamais. Ce service est simple, rapide et fiable, et il a un impact réel sur le développement de mon entreprise.", 
+    rating: 5 
+  },
+];
 
   const handleFaqToggle = (index) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
@@ -111,7 +140,7 @@ export default function Home() {
       {/* UPLOAD BUTTON */}
       <div className="mt-6">
         <Link
-          href="/upload"
+          href="/s'inscrire"
           className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-lg font-medium shadow-lg hover:shadow-xl hover:scale-105 transition-all"
         >
           <Upload size={18} /> Upload
@@ -148,16 +177,17 @@ export default function Home() {
             <Phone /> Contact Ralph Xpert
           </h2>
           <p className="text-gray-100 mt-3 max-w-2xl mx-auto">
-            Do you have a question, a project, or simply want to chat? Our team is here to support you in your digital growth.
+            Une question, un projet ou juste envie de discuter ? Notre équipe vous accompagne dans votre croissance digitale ! 
+        
           </p>
         </div>
 
         <div className="card mt-8 p-8 rounded-2xl text-center">
           <h3 className="text-xl font-semibold flex justify-center items-center gap-2 text-green-400">
-            <MessageCircle /> Contact us directly
+            <MessageCircle /> Contacter nous des maintenant 
           </h3>
           <p className="text-gray-300 mb-6">
-            Click the button below to contact our team.
+             Contactez notre équipe dès maintenant en cliquant sur le bouton ci-dessous.
           </p>
 
           <Link
